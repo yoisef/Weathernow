@@ -1,8 +1,12 @@
 package com.example.youssef.weathernow;
 
-import com.example.youssef.weathernow.models.BaseForecast;
+import android.text.Editable;
+
 import com.example.youssef.weathernow.models.CurWeather;
 import com.example.youssef.weathernow.models.ForcWeather;
+import com.example.youssef.weathernow.models.Searchlist;
+
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.http.GET;
@@ -16,4 +20,7 @@ public interface Endpoints  {
 
     @GET("forecast.json?key=ae70fd6bf0074213bf054319181901&days=5")
     Call<ForcWeather> getforecast(@Query("q")String city);
+
+    @GET("search.json?key=ae70fd6bf0074213bf054319181901")
+    Call<List<Searchlist>> getsearchlist(@Query("q") String string);
 }

@@ -42,6 +42,50 @@ public class foreadapter extends RecyclerView.Adapter<foreadapter.viewholder> {
         this.context=context;
         mylistfor=new ArrayList<>();
 
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
+
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor();
+        loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
+
+        builder.addInterceptor(loggingInterceptor);
+
+
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl("http://api.apixu.com/v1/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(builder.build())
+                .build();
+
+        Endpoints myendpoints = retrofit.create(Endpoints.class);
+
+
+
+        callf=myendpoints.getforecast("Cairo");
+
+
+
+        callf.enqueue(new Callback<ForcWeather>() {
+            @Override
+            public void onResponse(Call<ForcWeather> call, Response<ForcWeather> response) {
+
+
+
+                mylistfor = response.body().getForecast().getForecastday();
+                notifyDataSetChanged();
+
+
+
+
+            }
+
+            @Override
+            public void onFailure(Call<ForcWeather> call, Throwable t) {
+
+                // Log.e("error2",t.getMessage());
+
+            }
+        });
+
 
 /*
         nm.add("one");
@@ -51,11 +95,7 @@ public class foreadapter extends RecyclerView.Adapter<foreadapter.viewholder> {
 */
 
     }
-    public void setPhotos(List<Forecastday> photoList) {
-        mylistfor.clear();
-        mylistfor.addAll(photoList);
-        this.notifyItemRangeInserted(0, mylistfor.size() - 1);
-    }
+
 
 
     @NonNull
